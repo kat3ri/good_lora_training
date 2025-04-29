@@ -1,0 +1,46 @@
+# =========================================
+# DOCKERFILE for Flux/Custom LoRA Training
+# =========================================
+
+# 1. Base: Clean Python 3.12 Environment
+FROM python:3.12-slim
+
+# 2. Set working directory
+WORKDIR /workspace
+
+# 3. System packages
+RUN apt-get update && apt-get install -y \
+    git \
+    git-lfs \
+    curl \
+    wget \
+    libgl1 \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. Install Python requirements
+RUN pip install --no-cache-dir --upgrade \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 \
+    diffusers \
+    transformers \
+    accelerate \
+    safetensors \
+    huggingface-hub \
+    hf_transfer \
+    toml
+
+# 5. Huggingface Faster Transfers
+ENV HF_HUB_ENABLE_HF_TRANSFER=1
+
+# 6. Clone diffusion-pipe repository
+RUN git clone https://github.com/tdrussell/diffusion-pipe.git /workspace/diffusion-pipe
+
+# 7. Copy start script
+COPY start.sh /workspace/start.sh
+RUN chmod +x /workspace/start.sh
+
+# 8. Entrypoint
+ENTRYPOINT ["/workspace/start.sh"]
+
+# 9. Default CMD (just in case)
+CMD ["bash"]
