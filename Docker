@@ -29,6 +29,9 @@ RUN pip install --no-cache-dir --upgrade \
     hf_transfer \
     toml
 
+# 4.5 Install Jupyter
+RUN pip install --no-cache-dir jupyter
+
 # 5. Huggingface Faster Transfers
 ENV HF_HUB_ENABLE_HF_TRANSFER=1
 
@@ -41,6 +44,8 @@ RUN chmod +x /workspace/start.sh
 
 # 8. Entrypoint
 ENTRYPOINT ["/workspace/start.sh"]
+
+EXPOSE 8000
 
 # 9. Default CMD (just in case)
 CMD ["bash"]
