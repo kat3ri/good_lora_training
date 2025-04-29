@@ -39,6 +39,9 @@ if [[ "$DOWNLOAD_WAN" == "true" ]]; then
   fi
 fi
 
+# Launch Jupyter Notebook on port 8000 (listen-only, root, no token)
+jupyter notebook --ip=0.0.0.0 --port=8000 --no-browser --allow-root --NotebookApp.token='' &
+
 # === Training Placeholder ===
 echo "✅ Environment setup complete."
 echo "You can now run training commands inside the container."
